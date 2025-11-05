@@ -9,6 +9,9 @@ const olBtn = document.getElementById('olBtn');
 const leftBtn = document.getElementById('leftBtn');
 const centerBtn = document.getElementById('centerBtn');
 const rightBtn = document.getElementById('rightBtn');
+const exportBtn = document.getElementById('exportBtn');
+const importBtn = document.getElementById('importBtn');
+const dbTextarea = document.getElementById('dbTextarea');
 
 // Format text as bold
 boldBtn.addEventListener('click', () => {
@@ -82,4 +85,25 @@ editor.addEventListener('paste', function(e) {
   e.preventDefault();
   const text = e.clipboardData.getData('text/html') || e.clipboardData.getData('text/plain');
   document.execCommand('insertHTML', false, text);
+});
+
+// Export editor content to database format (HTML string)
+exportBtn.addEventListener('click', () => {
+  const htmlContent = editor.innerHTML;
+  dbTextarea.value = htmlContent;
+  dbTextarea.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Import from database format (restore HTML to editor)
+importBtn.addEventListener('click', () => {
+  const dbContent = dbTextarea.value.trim();
+  
+  if (!dbContent) {
+    alert('Database textarea is empty!');
+    return;
+  }
+  
+  editor.innerHTML = dbContent;
+  editor.scrollIntoView({ behavior: 'smooth' });
+  editor.focus();
 });
