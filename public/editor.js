@@ -117,7 +117,7 @@ importBtn.addEventListener('click', () => {
 
 // Load diff.html file via AJAX and populate textarea
 loadBtn.addEventListener('click', () => {
-  fetch('diff.html')
+  fetch('./diff.html')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to load diff.html: ${response.statusText}`);
