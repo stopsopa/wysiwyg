@@ -17,9 +17,59 @@ const img2Btn = document.getElementById('img2Btn');
 const img3Btn = document.getElementById('img3Btn');
 const fontSelect = document.getElementById('fontSelect');
 const fontSizeSelect = document.getElementById('fontSizeSelect');
+const undoBtn = document.getElementById('undoBtn');
+const redoBtn = document.getElementById('redoBtn');
 
 let selectedImage = null;
 let longPressTimer = null;
+let undoManager = null;
+
+// Initialize undo manager to track custom font size changes
+function initUndoManager() {
+  undoManager = {
+    savedStates: [editor.innerHTML],
+    currentStateIndex: 0,
+    maxStates: 50
+  };
+}
+
+// Save state for undo/redo of font size changes
+function saveState() {
+  if (!undoManager) initUndoManager();
+  
+  // Remove any states after current index (when user makes a new change after undo)
+  undoManager.savedStates = undoManager.savedStates.slice(0, undoManager.currentStateIndex + 1);
+  
+  // Add new state
+  undoManager.savedStates.push(editor.innerHTML);
+  undoManager.currentStateIndex++;
+  
+  // Limit history to maxStates
+  if (undoManager.savedStates.length > undoManager.maxStates) {
+    undoManager.savedStates.shift();
+    undoManager.currentStateIndex--;
+  }
+}
+
+// Custom undo
+function customUndo() {
+  if (!undoManager) initUndoManager();
+  if (undoManager.currentStateIndex > 0) {
+    undoManager.currentStateIndex--;
+    editor.innerHTML = undoManager.savedStates[undoManager.currentStateIndex];
+    updateFontSizeDisplay();
+  }
+}
+
+// Custom redo
+function customRedo() {
+  if (!undoManager) initUndoManager();
+  if (undoManager.currentStateIndex < undoManager.savedStates.length - 1) {
+    undoManager.currentStateIndex++;
+    editor.innerHTML = undoManager.savedStates[undoManager.currentStateIndex];
+    updateFontSizeDisplay();
+  }
+}
 
 // Format text as bold
 boldBtn.addEventListener('click', () => {
@@ -81,7 +131,46 @@ rightBtn.addEventListener('click', () => {
   editor.focus();
 });
 
-// Clear placeholder text on first input
+// Undo
+undoBtn.addEventListener('click', () => {
+  if (undoManager && undoManager.currentStateIndex > 0) {
+    customUndo();
+  }
+});
+
+// Redo
+redoBtn.addEventListener('click', () => {
+  if (undoManager && undoManager.currentStateIndex < undoManager.savedStates.length - 1) {
+    customRedo();
+  }
+});
+
+// Keyboard shortcuts for undo/redo - only in editor
+editor.addEventListener('keydown', (e) => {
+  // Ctrl+Z or Cmd+Z for undo
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+    e.preventDefault();
+    if (undoManager && undoManager.currentStateIndex > 0) {
+      customUndo();
+    }
+  }
+  
+  // Ctrl+Shift+Z or Cmd+Shift+Z for redo
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
+    e.preventDefault();
+    if (undoManager && undoManager.currentStateIndex < undoManager.savedStates.length - 1) {
+      customRedo();
+    }
+  }
+  
+  // Ctrl+Y or Cmd+Y for redo (Windows/Linux style)
+  if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+    e.preventDefault();
+    if (undoManager && undoManager.currentStateIndex < undoManager.savedStates.length - 1) {
+      customRedo();
+    }
+  }
+});
 editor.addEventListener('input', function() {
   if (this.innerText.trim() === 'Start typing here...') {
     this.innerHTML = '<p></p>';
@@ -112,6 +201,7 @@ importBtn.addEventListener('click', () => {
   }
   
   editor.innerHTML = dbContent;
+  initUndoManager();
   editor.scrollIntoView({ behavior: 'smooth' });
   editor.focus();
 });
@@ -406,33 +496,44 @@ fontSelect.addEventListener('change', () => {
   editor.focus();
 });
 
-// Change font size with inline style
+// Change font size with execCommand for undo/redo support
 fontSizeSelect.addEventListener('change', () => {
   if (fontSizeSelect.value) {
+    editor.focus();
+    
     const selection = window.getSelection();
     
+    // Only work if there's a selection
     if (selection.rangeCount > 0 && !selection.isCollapsed) {
-      const range = selection.getRangeAt(0);
-      const selectedContent = range.extractContents();
-      
-      // Create a span with the font size
-      const span = document.createElement('span');
-      span.style.fontSize = fontSizeSelect.value;
-      span.appendChild(selectedContent);
-      
-      range.insertNode(span);
-      
-      // Re-select the span content
-      range.selectNodeContents(span);
-      selection.removeAllRanges();
-      selection.addRange(range);
-      
-      editor.focus();
-      
-      // Update dropdown display
-      setTimeout(() => {
-        updateFontSizeDisplay();
-      }, 50);
+      try {
+        // Save state before change for undo
+        saveState();
+        
+        // Extract and apply font size
+        const range = selection.getRangeAt(0);
+        const selectedContent = range.extractContents();
+        
+        // Create span with font size
+        const span = document.createElement('span');
+        span.style.fontSize = fontSizeSelect.value;
+        span.appendChild(selectedContent);
+        
+        // Insert the span
+        range.insertNode(span);
+        
+        // Re-select and update
+        range.selectNodeContents(span);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        // Update dropdown display
+        setTimeout(() => {
+          updateFontSizeDisplay();
+        }, 50);
+      } catch (e) {
+        console.error('Font size error:', e);
+        editor.focus();
+      }
     }
   }
 });
@@ -451,3 +552,6 @@ img2Btn.addEventListener('click', () => {
 img3Btn.addEventListener('click', () => {
   insertImage('image3.svg');
 });
+
+// Initialize undo manager on page load
+initUndoManager();
