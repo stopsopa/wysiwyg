@@ -15,6 +15,7 @@ const dbTextarea = document.getElementById('dbTextarea');
 const img1Btn = document.getElementById('img1Btn');
 const img2Btn = document.getElementById('img2Btn');
 const img3Btn = document.getElementById('img3Btn');
+const fontSelect = document.getElementById('fontSelect');
 
 let selectedImage = null;
 let longPressTimer = null;
@@ -322,6 +323,16 @@ editor.addEventListener('click', (e) => {
   if (e.target.classList && !e.target.classList.contains('editor-image')) {
     closeImageMenu();
   }
+});
+
+// Change font family
+fontSelect.addEventListener('change', () => {
+  if (fontSelect.value) {
+    document.execCommand('fontName', false, fontSelect.value);
+  }
+  // Reset dropdown to default
+  fontSelect.value = '';
+  editor.focus();
 });
 
 // Insert Image 1

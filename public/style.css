@@ -72,6 +72,28 @@ h1 {
   background: #ddd;
 }
 
+.font-select {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.font-select:hover {
+  background: #e8e8e8;
+  border-color: #667eea;
+}
+
+.font-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 button {
   padding: 8px 14px;
   border: 1px solid #ddd;
