@@ -11,6 +11,7 @@ const centerBtn = document.getElementById('centerBtn');
 const rightBtn = document.getElementById('rightBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
+const loadBtn = document.getElementById('loadBtn');
 const dbTextarea = document.getElementById('dbTextarea');
 const img1Btn = document.getElementById('img1Btn');
 const img2Btn = document.getElementById('img2Btn');
@@ -112,6 +113,25 @@ importBtn.addEventListener('click', () => {
   editor.innerHTML = dbContent;
   editor.scrollIntoView({ behavior: 'smooth' });
   editor.focus();
+});
+
+// Load diff.html file via AJAX and populate textarea
+loadBtn.addEventListener('click', () => {
+  fetch('diff.html')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to load diff.html: ${response.statusText}`);
+      }
+      return response.text();
+    })
+    .then(htmlContent => {
+      dbTextarea.value = htmlContent;
+      dbTextarea.scrollIntoView({ behavior: 'smooth' });
+    })
+    .catch(error => {
+      console.error('Error loading diff.html:', error);
+      alert('Failed to load diff.html: ' + error.message);
+    });
 });
 
 // Insert image helper function
