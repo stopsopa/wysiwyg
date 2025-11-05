@@ -12,6 +12,9 @@
       <h2>WYSIWYG Editor</h2>
       
       <div class="toolbar">
+        <button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button>
+        <button id="redoBtn" title="Redo (Ctrl+Y)">↷ Redo</button>
+        <div class="separator"></div>
         <button id="boldBtn" title="Bold"><strong>B</strong></button>
         <button id="italicBtn" title="Italic"><em>I</em></button>
         <button id="h1Btn" title="Heading 1">H1</button>
@@ -34,6 +37,21 @@
           <option value="Comic Sans MS">Comic Sans MS</option>
           <option value="Trebuchet MS">Trebuchet MS</option>
           <option value="Palatino">Palatino</option>
+        </select>
+        <div class="separator"></div>
+        <select id="fontSizeSelect" class="font-select" title="Font Size">
+          <option value="">Default Size</option>
+          <option value="10px">10px</option>
+          <option value="12px">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+          <option value="28px">28px</option>
+          <option value="32px">32px</option>
+          <option value="36px">36px</option>
+          <option value="48px">48px</option>
         </select>
         <div class="separator"></div>
         <button id="img1Btn" title="Insert Image 1">🖼 Img1</button>

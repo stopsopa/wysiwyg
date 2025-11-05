@@ -16,6 +16,7 @@ const img1Btn = document.getElementById('img1Btn');
 const img2Btn = document.getElementById('img2Btn');
 const img3Btn = document.getElementById('img3Btn');
 const fontSelect = document.getElementById('fontSelect');
+const fontSizeSelect = document.getElementById('fontSizeSelect');
 
 let selectedImage = null;
 let longPressTimer = null;
@@ -318,8 +319,78 @@ function startResize(e, img, position) {
   document.addEventListener('touchend', handleEnd);
 }
 
-// Close menu when clicking in editor
+// Close menu when clicking in editor and update font size display
 editor.addEventListener('click', (e) => {
+  updateFontSizeDisplay();
+  if (e.target.classList && !e.target.classList.contains('editor-image')) {
+    closeImageMenu();
+  }
+});
+
+// Function to get and display the font size of selected text
+function updateFontSizeDisplay() {
+  const selection = window.getSelection();
+  
+  // If no selection or collapsed, show empty
+  if (selection.rangeCount === 0 || selection.isCollapsed) {
+    fontSizeSelect.value = '';
+    return;
+  }
+  
+  try {
+    const range = selection.getRangeAt(0);
+    let node = range.commonAncestorContainer;
+    
+    // If text node, get parent element
+    if (node.nodeType === Node.TEXT_NODE) {
+      node = node.parentElement;
+    }
+    
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) {
+      fontSizeSelect.value = '';
+      return;
+    }
+    
+    // Check inline style first
+    if (node.style && node.style.fontSize) {
+      fontSizeSelect.value = node.style.fontSize;
+      return;
+    }
+    
+    // Walk up the tree to find inline font-size
+    let currentNode = node;
+    while (currentNode && currentNode !== editor) {
+      if (currentNode.style && currentNode.style.fontSize) {
+        fontSizeSelect.value = currentNode.style.fontSize;
+        return;
+      }
+      currentNode = currentNode.parentElement;
+    }
+    
+    // Fallback: get computed font size
+    const computedSize = window.getComputedStyle(node).fontSize;
+    if (computedSize) {
+      const sizeMatch = computedSize.match(/(\d+(?:\.\d+)?)/);
+      if (sizeMatch) {
+        const numericSize = Math.round(parseFloat(sizeMatch[0]));
+        fontSizeSelect.value = numericSize + 'px';
+        return;
+      }
+    }
+    
+    fontSizeSelect.value = '';
+  } catch (e) {
+    console.error('Error updating font size display:', e);
+    fontSizeSelect.value = '';
+  }
+}
+
+// Update font size display on text selection
+editor.addEventListener('mouseup', updateFontSizeDisplay);
+editor.addEventListener('keyup', updateFontSizeDisplay);
+editor.addEventListener('touchend', updateFontSizeDisplay);
+editor.addEventListener('click', (e) => {
+  updateFontSizeDisplay();
   if (e.target.classList && !e.target.classList.contains('editor-image')) {
     closeImageMenu();
   }
@@ -333,6 +404,37 @@ fontSelect.addEventListener('change', () => {
   // Reset dropdown to default
   fontSelect.value = '';
   editor.focus();
+});
+
+// Change font size with inline style
+fontSizeSelect.addEventListener('change', () => {
+  if (fontSizeSelect.value) {
+    const selection = window.getSelection();
+    
+    if (selection.rangeCount > 0 && !selection.isCollapsed) {
+      const range = selection.getRangeAt(0);
+      const selectedContent = range.extractContents();
+      
+      // Create a span with the font size
+      const span = document.createElement('span');
+      span.style.fontSize = fontSizeSelect.value;
+      span.appendChild(selectedContent);
+      
+      range.insertNode(span);
+      
+      // Re-select the span content
+      range.selectNodeContents(span);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      
+      editor.focus();
+      
+      // Update dropdown display
+      setTimeout(() => {
+        updateFontSizeDisplay();
+      }, 50);
+    }
+  }
 });
 
 // Insert Image 1
