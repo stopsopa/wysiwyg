@@ -7,32 +7,34 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>WYSIWYG Editor</h1>
-    
-    <div class="toolbar">
-      <button id="boldBtn" title="Bold"><strong>B</strong></button>
-      <button id="italicBtn" title="Italic"><em>I</em></button>
-      <button id="h1Btn" title="Heading 1">H1</button>
-      <button id="h2Btn" title="Heading 2">H2</button>
-      <button id="h3Btn" title="Heading 3">H3</button>
-      <button id="ulBtn" title="Unordered List">• List</button>
-      <button id="olBtn" title="Ordered List">1. List</button>
-      <div class="separator"></div>
-      <button id="leftBtn" title="Align Left">⬅ Left</button>
-      <button id="centerBtn" title="Align Center">⬌ Center</button>
-      <button id="rightBtn" title="Align Right">Right ➡</button>
+  <div class="page-wrapper">
+    <div class="container editor-container">
+      <h2>WYSIWYG Editor</h2>
+      
+      <div class="toolbar">
+        <button id="boldBtn" title="Bold"><strong>B</strong></button>
+        <button id="italicBtn" title="Italic"><em>I</em></button>
+        <button id="h1Btn" title="Heading 1">H1</button>
+        <button id="h2Btn" title="Heading 2">H2</button>
+        <button id="h3Btn" title="Heading 3">H3</button>
+        <button id="ulBtn" title="Unordered List">• List</button>
+        <button id="olBtn" title="Ordered List">1. List</button>
+        <div class="separator"></div>
+        <button id="leftBtn" title="Align Left">⬅ Left</button>
+        <button id="centerBtn" title="Align Center">⬌ Center</button>
+        <button id="rightBtn" title="Align Right">Right ➡</button>
+      </div>
+
+      <div id="editor" class="editor" contenteditable="true">
+        <p>Start typing here...</p>
+      </div>
     </div>
 
-    <div id="editor" class="editor" contenteditable="true">
-      <p>Start typing here...</p>
-    </div>
-
-    <div class="database-section">
+    <div class="container db-container">
       <h2>Database Format</h2>
       <div class="db-buttons">
-        <button id="exportBtn" class="db-btn">📤 Export to DB Format</button>
-        <button id="importBtn" class="db-btn">📥 Import from DB</button>
+        <button id="exportBtn" class="db-btn">📤 Export</button>
+        <button id="importBtn" class="db-btn">📥 Import</button>
       </div>
       <textarea id="dbTextarea" class="db-textarea" placeholder="Database content will appear here..."></textarea>
     </div>
