@@ -155,6 +155,112 @@ button:active {
   margin: 10px 0;
 }
 
+.editor-image {
+  max-width: 40%;
+  border-radius: 8px;
+  margin: 10px 0;
+  transition: all 0.2s ease;
+}
+
+.editor-image.selected {
+  border: 3px solid #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+}
+
+.editor-image.float-left {
+  float: left;
+  margin: 0 15px 15px 0;
+  shape-outside: margin-box;
+}
+
+.editor-image.float-right {
+  float: right;
+  margin: 0 0 15px 15px;
+  shape-outside: margin-box;
+}
+
+.editor-image.no-wrap {
+  float: none;
+  display: block;
+  margin: 15px 0;
+}
+
+.resize-container {
+  position: relative;
+  display: inline-block;
+}
+
+.resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #007bff;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.resize-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
+}
+
+.resize-ne {
+  top: -6px;
+  right: -6px;
+  cursor: nesw-resize;
+}
+
+.resize-sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: nesw-resize;
+}
+
+.resize-se {
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.resize-handle:hover {
+  background: #0056b3;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.6);
+}
+
+.image-menu {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  flex-wrap: wrap;
+}
+
+.image-menu button {
+  padding: 6px 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+  font-weight: 500;
+}
+
+.image-menu button:hover {
+  background: #0056b3;
+}
+
+.image-menu button:active {
+  background: #004085;
+}
+
 .database-section {
   flex: 1;
   display: flex;
