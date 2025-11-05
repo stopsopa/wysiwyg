@@ -104,11 +104,32 @@ button:active {
   outline: none;
   word-wrap: break-word;
   flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .editor:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Custom scrollbar styling */
+.editor::-webkit-scrollbar {
+  width: 10px;
+}
+
+.editor::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.editor::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 5px;
+}
+
+.editor::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
 }
 
 .editor p {
