@@ -148,6 +148,13 @@ button:active {
   margin-bottom: 5px;
 }
 
+.editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
 .database-section {
   flex: 1;
   display: flex;

@@ -12,6 +12,9 @@ const rightBtn = document.getElementById('rightBtn');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const dbTextarea = document.getElementById('dbTextarea');
+const img1Btn = document.getElementById('img1Btn');
+const img2Btn = document.getElementById('img2Btn');
+const img3Btn = document.getElementById('img3Btn');
 
 // Format text as bold
 boldBtn.addEventListener('click', () => {
@@ -106,4 +109,26 @@ importBtn.addEventListener('click', () => {
   editor.innerHTML = dbContent;
   editor.scrollIntoView({ behavior: 'smooth' });
   editor.focus();
+});
+
+// Insert image helper function
+function insertImage(imageSrc) {
+  editor.focus();
+  const imgHtml = `<img src="${imageSrc}" style="max-width: 100%; height: auto; margin: 10px 0;" />`;
+  document.execCommand('insertHTML', false, imgHtml);
+}
+
+// Insert Image 1
+img1Btn.addEventListener('click', () => {
+  insertImage('image1.svg');
+});
+
+// Insert Image 2
+img2Btn.addEventListener('click', () => {
+  insertImage('image2.svg');
+});
+
+// Insert Image 3
+img3Btn.addEventListener('click', () => {
+  insertImage('image3.svg');
 });

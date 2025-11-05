@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 400" width="150" height="400">
+  <rect width="150" height="400" fill="#f39c12" stroke="#333" stroke-width="2"/>
+  <text x="75" y="200" font-size="30" text-anchor="middle" fill="#ffffff" font-weight="bold" dominant-baseline="middle">
+    <tspan x="75" dy="-10">Vertical</tspan>
+    <tspan x="75" dy="25">Rectangle</tspan>
+  </text>
+</svg>
